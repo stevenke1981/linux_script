@@ -23,8 +23,32 @@ linux_script/
 │   ├── 01_setup_remote_desktop.sh    # 安裝 XFCE4 + XRDP
 │   └── 02_fix_xrdp.sh               # 修正 XRDP 黑屏 / 無法連線
 │
-└── 04_network/          # 網路設定
-    └── setup_network.sh             # 靜態 IP / DHCP / DNS 設定（Netplan）
+├── 04_network/          # 網路設定
+│   └── setup_network.sh             # 靜態 IP / DHCP / DNS 設定（Netplan）
+│
+├── 05_troubleshoot/     # Linux Server 常見問題快速處理
+│   ├── 01_disk_full.sh              # 磁碟空間不足（清理 apt/journal/大檔案）
+│   ├── 02_memory_swap.sh            # 記憶體不足 / 建立 Swap
+│   ├── 03_high_cpu.sh               # CPU 負載過高診斷 / Kill Process
+│   ├── 04_service_fix.sh            # Systemd 服務無法啟動修復
+│   ├── 05_network_debug.sh          # 網路連線問題診斷（DNS/路由/防火牆）
+│   ├── 06_ssh_fix.sh                # SSH 無法連線修復
+│   ├── 07_log_cleanup.sh            # 日誌檔清理與 logrotate 設定
+│   ├── 08_time_sync.sh              # 系統時間不同步修復（NTP/台灣時區）
+│   ├── 09_firewall_manager.sh       # UFW 防火牆互動式管理
+│   └── 10_user_permission.sh        # 使用者與權限管理
+│
+└── 06_ai_deploy/        # AI 生產環境部署
+    ├── 01_download_model.sh          # HuggingFace 模型下載（GGUF/完整Repo）
+    ├── 02_gpu_health_check.sh        # GPU 健康檢查 / VRAM OOM 預防
+    ├── 03_llama_server_service.sh    # llama-server 建立為 systemd 服務
+    ├── 04_api_health_check.sh        # AI API 健康檢查 / 效能測試
+    ├── 05_env_setup.sh              # AI 環境變數設定（CUDA/HF/llama）
+    ├── 06_monitor_ai_service.sh      # 即時監控儀表板（GPU/API/服務）
+    ├── 07_auto_restart_service.sh    # Watchdog 自動重啟（systemd timer）
+    ├── 08_multi_model_switch.sh      # 多模型切換管理
+    ├── 09_log_collector.sh           # 日誌收集 / 錯誤分析 / 診斷報告
+    └── 10_backup_restore.sh          # AI 環境備份與還原 / 部署腳本匯出
 ```
 
 ## 建議執行順序
@@ -87,6 +111,36 @@ bash 03_remote_desktop/01_setup_remote_desktop.sh
 | 腳本 | 功能 |
 |------|------|
 | `setup_network.sh` | 互動式設定靜態 IP 或 DHCP，透過 Netplan 套用，支援 DNS 設定 |
+
+### 05_troubleshoot / Linux Server 常見問題
+
+| 腳本 | 問題 | 功能 |
+|------|------|------|
+| `01_disk_full.sh` | 磁碟空間不足 | apt clean、舊 kernel 移除、journal 清理、大檔案掃描 |
+| `02_memory_swap.sh` | 記憶體不足 | Page Cache 清除、Swap 建立與 swappiness 調整 |
+| `03_high_cpu.sh` | CPU 負載過高 | Process 診斷、殭屍 Process 清理、互動式 Kill |
+| `04_service_fix.sh` | 服務無法啟動 | 失敗服務列表、日誌查看、重啟/reset-failed/啟用開機 |
+| `05_network_debug.sh` | 網路無法連線 | 介面/路由/DNS/ping 診斷、快速修復 |
+| `06_ssh_fix.sh` | SSH 無法連線 | 設定語法檢查、防火牆修復、密碼登入啟用 |
+| `07_log_cleanup.sh` | 日誌佔滿磁碟 | journald 清理、logrotate 設定、壓縮日誌刪除 |
+| `08_time_sync.sh` | 系統時間錯誤 | NTP 修復、台灣時區設定、台灣 NTP 伺服器 |
+| `09_firewall_manager.sh` | 防火牆管理 | UFW 規則增刪、常用服務開放、IP 白名單 |
+| `10_user_permission.sh` | 權限問題 | 使用者增刪、sudo 管理、SSH key 權限修復 |
+
+### 06_ai_deploy / AI 生產環境部署
+
+| 腳本 | 場景 | 功能 |
+|------|------|------|
+| `01_download_model.sh` | 模型取得 | HuggingFace GGUF/完整模型下載，支援 hf_transfer 加速 |
+| `02_gpu_health_check.sh` | 部署前確認 | VRAM/溫度/功耗檢查，推薦可用模型大小 |
+| `03_llama_server_service.sh` | 服務化 | 將 llama-server 建立為 systemd 服務，開機自啟 |
+| `04_api_health_check.sh` | 上線驗證 | /health、/v1/models、推理效能（tok/s）測試 |
+| `05_env_setup.sh` | 環境初始化 | CUDA/HuggingFace/llama/Python 環境變數一鍵設定 |
+| `06_monitor_ai_service.sh` | 即時監控 | GPU/VRAM/API/服務狀態儀表板（每 5s 刷新） |
+| `07_auto_restart_service.sh` | 高可用 | Watchdog systemd timer，API 無回應自動重啟 |
+| `08_multi_model_switch.sh` | 模型管理 | 多模型列表、切換、快速測試、效能比較 |
+| `09_log_collector.sh` | 問題排查 | 即時日誌、診斷報告、OOM/崩潰錯誤分析 |
+| `10_backup_restore.sh` | 備份還原 | 設定備份/還原、自動部署腳本匯出 |
 
 ## 需求
 
