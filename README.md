@@ -9,7 +9,8 @@ linux_script/
 ├── 01_system/           # 系統基礎設定
 │   ├── 01_setup_tw_mirror.sh         # 台灣 apt 鏡像站點
 │   ├── 02_install_build_essential.sh # 編譯工具 (gcc/cmake/git)
-│   └── 03_setup_disable_sleep.sh     # 停用休眠與螢幕保護
+│   ├── 03_setup_disable_sleep.sh     # 停用休眠與螢幕保護
+│   └── 04_install_chinese_input.sh   # 台灣中文輸入法（Fcitx5/IBus）
 │
 ├── 02_gpu_ai/           # GPU 驅動 & AI 環境
 │   ├── 01_install_nvidia_driver.sh   # NVIDIA 驅動（ubuntu-drivers）
@@ -87,6 +88,7 @@ bash 03_remote_desktop/01_setup_remote_desktop.sh
 | `01_setup_tw_mirror.sh` | 加入 NCTU/NTU/HiNet 鏡像站，加速 `apt` 下載 |
 | `02_install_build_essential.sh` | 安裝 `gcc`, `cmake`, `git`, `ninja-build`, `pkg-config` |
 | `03_setup_disable_sleep.sh` | 停用 systemd 休眠目標、logind 閒置動作、XFCE4 螢幕保護 |
+| `04_install_chinese_input.sh` | 注音/倉頡/速成/行列/大易，支援 Fcitx5 與 IBus，含中文字型與語系 |
 
 ### 02_gpu_ai / GPU & AI
 
